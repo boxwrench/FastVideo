@@ -106,6 +106,11 @@ def run(shape_name: str, gated: bool, warmup: int, iterations: int) -> dict:
     if max_abs > 0.05:
         raise AssertionError(f"baseline reference error too large: {max_abs}")
 
+    # Correctness temporaries must not contaminate the measured baseline.
+    del got, ref, err
+    torch.cuda.synchronize()
+    torch.cuda.empty_cache()
+
     for _ in range(warmup):
         baseline_combine(out_c, out_s, weight, be)
     torch.cuda.synchronize()
