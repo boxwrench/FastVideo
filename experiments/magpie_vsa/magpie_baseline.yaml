@@ -1,0 +1,19 @@
+kernel:
+  id: "fastvideo_vsa_combine_baseline"
+  type: pytorch
+  source_files:
+    - "./experiments/magpie_vsa/vsa_combine_baseline.py"
+    - "./fastvideo-kernel/python/fastvideo_kernel/ops.py"
+  working_dir: "."
+  testcase_command:
+    - ["python", "experiments/magpie_vsa/vsa_combine_baseline.py", "--shape", "h3", "--gated", "--warmup", "1", "--iterations", "2"]
+  env:
+    HIP_VISIBLE_DEVICES: "0"
+    PYTORCH_ROCM_ARCH: "gfx1201"
+
+performance:
+  backend: rocprof_compute
+  timeout_seconds: 900
+  rocprof_compute:
+    roofline: false
+    profile_args: []
